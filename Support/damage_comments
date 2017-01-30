@@ -1,0 +1,231 @@
+"""
+Global Variables
+"""
+
+my_tree : tree object
+    provides the tree structure used to price emissions
+
+filename : string	
+    file to write the damage coefficients onto
+
+# Tipping Point Related
+peak_temp : float
+    determines the probability of a tipping point
+    
+tip_on : integer
+    flag that turns tipping points on (1) or off (0)
+
+disaster_tail : float
+    Curvature of the cost function
+
+
+#GHG level Related
+pindyck_impact_k : float
+    Shape parameter from Pyndyck damage function
+
+pindyck_impact_theta : float
+    Scale parameter from Pyndyck damage function
+
+pindyck_impact_displace : float
+    Displacement parameter from Pyndyck damage function
+
+bau_ghg : float
+    the business-as-usual level of GHG in the atmosphere at time T with no mitigation
+
+maxh : float
+    time paramter from Pindyck which indicates the time it takes for temp to get half way to its max value for a given level of ghg
+
+temp_map : integer
+    the mapping from GHG to temperature
+    0 implies pindyck displace gamma
+    1 implies Wagner-Weitzman normal
+    2 implies Roe-Baker
+
+#MC Precision Related
+draws : integer
+    number of draws per loop
+
+over : integer
+    number of times to go through the draw loop
+
+monte_loops : integer
+    number of full monte carlo simulations to run
+
+loops : integer
+    number of times to go thru the draws * over loop
+
+dnum : integer
+    the number of GHG levels over which damage simulations are created
+
+# Carbon Cycle Related
+...
+
+"""
+Functions
+"""
+
+# Initialization
+def initialize_tree(self):
+	'''  initialize damage coefficients for recombining tree
+                    the state reached by an up-down move is separate from a down-up move because in general the two paths will
+                    lead to different degrees of mitigation and therefore of ghg_level
+                    a "recombining" tree is one in which the movement from one state to the next through time is nonetheless such that
+                    an up move followed by a down move leads to the same fragility, that is damage(ghg_level), as a down move followed by an up move
+                    a recombining tree thus models a diffusion process
+                    in order to create a recombining tree we first calculate the damage by state separately for each state, but then 
+                    the damage in the combined state is set equal to the average damage across both 
+            '''
+
+def damage_function_initialization(self):
+        '''Reads the monte carlo simulation from a file,
+            if neccessary, runs a new monte carlo simulation
+            and puts the results on a file
+
+            bau_emissions is the business-as-usual amount of emissions
+            that is the emissions from time 0 to time T with no mitigation
+        '''
+
+# Damage Calculate
+
+def damage_simulation(self):
+	'''
+	save the simulation results in a file
+
+	'''
+
+def damage_function(self,x,node):
+    '''
+        Calculates the damages for any given node, for the path of mitigation actions given by the vector x
+    
+    Parameters
+    ----------
+
+    x : float
+        the vector of mitigations
+
+    node : integer
+        the node in the my_tree for which the damage is to be calculated
+    
+    Returns
+    -------
+    damage : float
+        the damages in the state at the given period given mitigation specified
+    '''
+
+def d_damage_by_state(self, x, node, j):
+        '''
+            Calculates the derivative of the damage function for any given node with respect to mitigation at node j
+        
+        Parameters
+        ----------
+        x : float
+            vector of mitigation values for each node
+        
+        node : integer
+            the node at which the derivative is calculated
+        
+        j : integer
+            the node whose mitigation the derivative of damages is calculated with respect to 
+        
+        Returns
+        -------
+        damage_derivative : float
+            the derivative of the damage function with respect to changes in mitigation
+        '''
+
+
+def nd_damage_by_state( self, x, node, j ):
+        '''
+            Calculates and returns the numerical derivative of damage by state
+        
+        Parameters
+        ----------
+        x : float
+            Vector of mitigation values for each node
+        
+        node : integer
+            the node for which the damage function derivative is being taken
+        
+        j : integer
+            the node whose mitigation the derivative of damage is being taken with respect to
+        
+        Returns
+        -------
+        damage_derivative : float
+            numerical gradient of the damage by state function wrt emissions mitigation
+        '''
+
+# Mitigation Related
+def average_mitigation(self, x, node):
+        '''
+            Calculates the average mitigation leading up to the damage calculation in "node"
+        
+        Parameters
+        ----------
+        x : float
+            vector of mitigations in each node
+        
+        node : integer
+            the node for which the average mitigation leading to the damages are being calculated
+
+        Returns
+        -------
+        average_mitigation : float
+            the average mitigation to date for a given node
+        '''
+
+def d_average_mitigation(self, node, j):
+        '''Calculates the derivative of average_mitigation at node wrt mitigation at node j
+        
+        Parameters
+        ----------
+        node : integer
+            the node for which the damages derivative is being calculated
+
+        j : integer
+            the derivative of damages is being calculated with respect to mitigation at node j
+
+        Returns
+        -------
+        deriv_average_mitigation_wrt_xj : float
+            the derivative of average_mitigation in the node "node" wrt mitigation at node j
+        '''
+def nd_average_mitigation(self, x, node, j):
+        '''Calculates the numerical derivative of average_mitigation wrt mitigation at node j
+        
+        Parameters
+        ----------
+        x : float
+            vector of mitigations in each node
+        
+        node : integer
+            the node for which the damages derivative is being calculated
+
+        j : integer
+            the derivative of damages is being calculated with respect to mitigation at node j
+
+        Returns
+        -------
+        deriv_average_mitigation_wrt_xj : float
+            the derivative of damage in the node "node" wrt mitigation at node j
+        '''
+
+# Carbon Cycle Related
+...
+
+
+
+# Calculation Tools
+
+def gammaArray(self, shape, rate, dimension):
+    scale = 1/rate
+    y = np.random.gamma(shape, scale, dimension)
+    return y
+
+def normalArray(self, mean, stdev, dimension):
+    y = np.random.normal(mean, stdev, dimension)
+    return y
+
+def uniformArray(self, dimension):
+    y = np.random.random(dimension)
+    return y
